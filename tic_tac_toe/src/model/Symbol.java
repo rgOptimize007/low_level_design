@@ -1,44 +1,20 @@
 package model;
 
 public class Symbol {
-	
-	private char symbol;
-	
 
-	public Symbol(char symbol) {
-		this.symbol = symbol;
-	}
+    private char sign;
 
-	public char getSymbol() {
-		return symbol;
-	}
+    public Symbol(char sign) {
+        this.sign = sign;
+    }
 
-	public void setSymbol(char symbol) {
-		this.symbol = symbol;
-	}
+    public char getSign() {
+        return sign;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + symbol;
-		return result;
-	}
+    public void setsign(char sign) {
+        this.sign = sign;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Symbol other = (Symbol) obj;
-		if (symbol != other.symbol)
-			return false;
-		return true;
-	}
-	
-	
 
 }

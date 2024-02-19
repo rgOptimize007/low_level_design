@@ -1,42 +1,25 @@
 package model;
 
-public class Move {
-	
-	private Player player;
-	private int row;
-	private int col;
+import enumerations.CellState;
+import exceptions.TicTacToeException;
 
-	public Move(int row, int col, Player player) {
-		this.row = row;
-		this.col = col;
+public class Move {
+
+	private Cell cell;
+	private Player player;
+
+	public Move(Cell cell , Player player) {
+		this.cell = cell;
 		this.player = player;
 	}
-	
-	
 
-	public int getRow() {
-		return row;
+	public Cell getCell() {
+		return cell;
 	}
 
-
-
-	public void setRow(int row) {
-		this.row = row;
+	public void setCell(Cell cell) {
+		this.cell = cell;
 	}
-
-
-
-	public int getCol() {
-		return col;
-	}
-
-
-
-	public void setCol(int col) {
-		this.col = col;
-	}
-
-
 
 	public Player getPlayer() {
 		return player;
@@ -46,15 +29,5 @@ public class Move {
 		this.player = player;
 	}
 
-
-
-	@Override
-	public String toString() {
-		return "Move [player=" + player + ", row=" + row + ", col=" + col + "]";
-	}
-	
-	
-	
-	
 
 }

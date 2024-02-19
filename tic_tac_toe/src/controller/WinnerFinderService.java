@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import interfaces.WinningStrategy;
+import model.Cell;
 import model.Move;
 import model.Player;
 import services.ColumnWinningStrategy;
@@ -15,7 +16,7 @@ public class WinnerFinderService {
 	
 	Map<String,Map<Player,Integer>> freqMap = new HashMap<>();
 
-	public Player findWinner(Move move, Move[][] board, List<WinningStrategy> list) {
+	public Player findWinner(Move move, List<List<Cell>> board, List<WinningStrategy> list) {
 		
 		//System.out.println("Checking Winner... ");
 		
@@ -23,11 +24,11 @@ public class WinnerFinderService {
 			String freqMapKey = null;
 			if(strategy instanceof RowWinningStrategy){
 			//	System.out.println("Checking row Strategy...");
-				freqMapKey = Integer.toString(move.getRow()) + "-row";
+				freqMapKey = Integer.toString(move.getCell().getRow()) + "-row";
 				}
 			else if(strategy instanceof ColumnWinningStrategy){
 			//	System.out.println("Checking Col Strategy...");
-			    freqMapKey = Integer.toString(move.getRow()) + "-col";
+			    freqMapKey = Integer.toString(move.getCell().getRow()) + "-col";
 			}
 			
 			Map<Player,Integer> symbolFreqMap = freqMap.get(freqMapKey);
@@ -41,7 +42,7 @@ public class WinnerFinderService {
 				if(currentFreq == null){
 					symbolFreqMap.put(move.getPlayer(), 1);
 				}
-				else if(currentFreq.intValue() + 1 >= board[0].length){
+				else if(currentFreq.intValue() + 1 >= board.get(0).size()){
 					return move.getPlayer();
 				}
 				else {
