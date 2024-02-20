@@ -1,73 +1,83 @@
 package client;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import controller.GameController;
 import enumerations.GameState;
 import enumerations.PlayerType;
 import interfaces.WinningStrategy;
+import model.Game;
 import model.HumanPlayer;
 import model.Player;
 import exceptions.TicTacToeException;
 import services.ColumnWinningStrategy;
+import services.DiagonalWinningStrategy;
+import services.ReverseDiagonalWinningStrategy;
 import services.RowWinningStrategy;
 
 public class ClientInterface {
-	
-	
-
 	/**
 	 * @param args
 	 * @throws TicTacToeException
 	 */
 	public static void main(String[] args) throws TicTacToeException {
 
-	//	System.out.println("Welcome to tic-tac-toe \n Its a 2 player game : \n Please enter name for player 1 (Symbol - X): ");
-
+		// following object to control state of the game (Its a stateless object)
 		GameController gameController = new GameController();
+
 		Scanner sc = new Scanner(System.in);
+
+		// players playing the game
 		List<Player> players = new ArrayList<>();
 		System.out.println("Peak Player names");
 		players.add(new HumanPlayer("1","Mark",'X',PlayerType.HUMAN));
 		players.add(new HumanPlayer("2","Harvey",'O',PlayerType.HUMAN));
+
+		// winning strategies for the game
+		List<WinningStrategy> winningStrategies = Arrays.asList(new RowWinningStrategy(),new ColumnWinningStrategy()
+				,new DiagonalWinningStrategy(),new ReverseDiagonalWinningStrategy());
+
+		// create game object
+		Game game = gameController.startGame(3, players, 0, winningStrategies);
+
+		// play game
+		while(gameController.checkGameState(game).toString().equals(GameState.ON_GOING.toString())){
 		
-		List<WinningStrategy> winningStrategies = new ArrayList<>();
-		winningStrategies.add(new RowWinningStrategy());
-		winningStrategies.add(new ColumnWinningStrategy());
-		
-		gameController.startGame(3, players, 0, winningStrategies);
-		
-		System.out.println("Game has started , Please see the board below and play...");
-		
-		//System.out.println("Game state : " + gameController.checkGameState().toString());
-		
-		while(gameController.checkGameState().toString().equals(GameState.ON_GOING.toString())){
-		
-		
-			System.out.println("Current turn : " + gameController.getCurrentPlayer().getPlayerName());
+			// take input for move to make
+			System.out.println("Current turn : " + gameController.getCurrentPlayer(game).getPlayerName());
 			System.out.println("Enter row and column");
 			int row = sc.nextInt();
 			int col = sc.nextInt();
-			
-			gameController.makeMove(row , col,gameController.getCurrentPlayer());
-			if(gameController.checkGameState().toString().equals(GameState.FINISHED.toString())){
+
+			// make move on the board
+			gameController.makeMove(row , col,gameController.getCurrentPlayer(game),game);
+
+			// check if game has finished
+			if(gameController.checkGameState(game).toString().equals(GameState.FINISHED.toString())){
 				break;
 			}
-			gameController.showBoard();
+
+			// present the board;
+			gameController.showBoard(game);
+
+			// ask if user wants to undo the move
 			System.out.println("Want to undo?? [Y/N]");
+
+			// evaluate undo
 			String undoFlag = sc.next().toUpperCase();
 			if(undoFlag.equals("Y")){
-				gameController.undoMove();
-				gameController.showBoard();
+				// perform undo operation and show board post that
+				gameController.undoMove(game);
+				gameController.showBoard(game);
 			}
 			
 		}
-		
-		if(gameController.checkGameState().toString().equals(GameState.FINISHED.toString())){
-			System.out.println("Winner for current game is : " + gameController.getGame().getWinner().getPlayerName());
+
+		// declare the winner
+		if(gameController.checkGameState(game).toString().equals(GameState.FINISHED.toString())){
+			System.out.println("Winner for current game is : " + game.getWinner().getPlayerName());
 		}
-		else if(gameController.checkGameState().toString().equals(GameState.DRAW.toString())){
+		// declare that game is Draw
+		else if(gameController.checkGameState(game).toString().equals(GameState.DRAW.toString())){
 			System.out.println("Its a draw..");
 		}
 	

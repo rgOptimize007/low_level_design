@@ -12,53 +12,46 @@ import model.Player;
 import exceptions.TicTacToeException;
 
 public class GameController {
-	
-	private Game game;
+
 	private WinnerFinderService winnerFinder = new WinnerFinderService();
 	
 	// method which will initialize the game state
-	public void startGame(int boardSize , List<Player> players, int currentPlayerIndex , List<WinningStrategy> winningStrategies) throws TicTacToeException{
+	public Game startGame(int boardSize , List<Player> players, int currentPlayerIndex , List<WinningStrategy> winningStrategies) throws TicTacToeException{
 		
-     this.game = new Game.GameBuilder().setBoard(boardSize).setPlayers(players)
+     return new Game.GameBuilder().setBoard(boardSize).setPlayers(players)
     		    .setWinningStrategies(winningStrategies).setCurrentPlayersIndex(currentPlayerIndex)
     		    .setGameState(GameState.ON_GOING).build();
-
 	}
 
 
-	public void makeMove(int row, int col, Player player) throws TicTacToeException{
-		this.game.makeMove(row,col,player);
+	public void makeMove(int row, int col, Player player,Game game) throws TicTacToeException{
+		game.makeMove(row,col,player);
 	}
 
 	// method to undo currentPlayers Move
-	public void undoMove(){
+	public void undoMove(Game game){
 		// extract move from undo list
-		Move move = this.game.getUndoList().remove(this.game.getUndoList().size()-1);
+		Move move = game.getUndoList().remove(game.getUndoList().size()-1);
 
 		//make changes to the board
-		List<Cell> row = this.game.getBoard().getBoard().get(move.getCell().getRow());
+		List<Cell> row = game.getBoard().getBoard().get(move.getCell().getRow());
 		row.remove(move.getCell().getCol());
 
 		// set player index back to previous player
-		this.game.setCurrentPlayersIndex(this.game.getCurrentPlayersIndex()-1);
+		game.setCurrentPlayersIndex(game.getCurrentPlayersIndex()-1);
 	}
 
 	
-	public GameState checkGameState(){
-		return this.game.getGameState();
+	public GameState checkGameState(Game game){
+		return game.getGameState();
 	}
 	
-	public Player getCurrentPlayer(){
+	public Player getCurrentPlayer(Game game){
 		return game.getPlayers().get(game.getCurrentPlayersIndex());
 	}
 
 
-	public Game getGame() {
-		// TODO Auto-generated method stub
-		return this.game;
-	}
-
-	public void showBoard() {
-		this.game.getBoard().showBoard();
+	public void showBoard(Game game) {
+		game.getBoard().showBoard();
 	}
 }
