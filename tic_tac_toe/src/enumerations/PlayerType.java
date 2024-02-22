@@ -1,8 +1,8 @@
 package enumerations;
 
 public enum PlayerType {
-	
-	HUMAN,
-	BOT
+
+    HUMAN,
+    BOT
 
 }

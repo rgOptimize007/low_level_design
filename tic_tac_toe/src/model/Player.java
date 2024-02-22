@@ -3,56 +3,53 @@ package model;
 import enumerations.PlayerType;
 
 public abstract class Player {
-	
-	private String playerId;
-	private String playerName;
-	private Symbol playerSymbol;
-	private PlayerType playerType;
-	
-	public Player(String id , String name , char symbol, PlayerType type) {
-		playerId = id;
-		playerName = name;
-		playerSymbol = new Symbol(symbol);
-		playerType = type;
-	}
-	
-	
 
-	public PlayerType getPlayerType() {
-		return playerType;
-	}
+    private String playerId;
+    private String playerName;
+    private Symbol playerSymbol;
+    private PlayerType playerType;
+
+    public Player(String id, String name, char symbol, PlayerType type) {
+        playerId = id;
+        playerName = name;
+        playerSymbol = new Symbol(symbol);
+        playerType = type;
+    }
 
 
-
-	public void setPlayerType(PlayerType playerType) {
-		this.playerType = playerType;
-	}
-
+    public PlayerType getPlayerType() {
+        return playerType;
+    }
 
 
-	public String getPlayerId() {
-		return playerId;
-	}
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
 
-	public void setPlayerId(String playerId) {
-		this.playerId = playerId;
-	}
 
-	public String getPlayerName() {
-		return playerName;
-	}
+    public String getPlayerId() {
+        return playerId;
+    }
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
 
-	public Symbol getPlayerSymbol() {
-		return playerSymbol;
-	}
+    public String getPlayerName() {
+        return playerName;
+    }
 
-	public void setPlayerSymbol(Symbol playerSymbol) {
-		this.playerSymbol = playerSymbol;
-	}
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public Symbol getPlayerSymbol() {
+        return playerSymbol;
+    }
+
+    public void setPlayerSymbol(Symbol playerSymbol) {
+        this.playerSymbol = playerSymbol;
+    }
 
 
 }
