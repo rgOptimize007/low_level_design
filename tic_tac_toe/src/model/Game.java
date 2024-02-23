@@ -4,10 +4,9 @@ import enumerations.CellState;
 import enumerations.GameState;
 import exceptions.TicTacToeException;
 import interfaces.WinningStrategy;
-import services.WinnerManagementService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -95,31 +94,47 @@ public class Game {
         undoList.add(move);
     }
 
-    public Move performAndGetMove(int row, int col, Player player) throws TicTacToeException {
+    public Move performMove(int row, int col, Player player)  {
 
 		// validate row and column data
 		if (validateCell(row,col)) {
 
-			//update the cell
+			//mark cell FILLED for move
             Cell cell = board.getBoard().get(row).get(col);
-			cell.setPlayer(player);
-			cell.setCellState(CellState.FILLED);
+            cell.setPlayer(player);
+            cell.setCellState(CellState.FILLED);
 
 			//create a move
 			Move move = new Move(cell, player);
 
+            // update frequency counters for winner calculation
+            winningStrategies.forEach(t -> t.addMoveFrequency(board.getBoard(),move));
+
 			// add cell to undo list
 			addMoveToUndoList(move);
+
+            if(move != null){
+
+                // update game status
+                updateGameStatus(move);
+
+                // move to next player if game is still on going
+                if(gameState.toString().equals(GameState.ON_GOING.toString())){
+                    // move to next player
+                    currentPlayersIndex = (currentPlayersIndex + 1) % players.size();
+                }
+            }
 
 			return move;
 
 		} else {
-			System.out.println("Invalid move ... ");
+			System.out.println("Invalid move ... Please play again ");
 		}
 
 		return null;
 
 	}
+
 
     private boolean validateCell(int row , int col) {
 
@@ -135,10 +150,6 @@ public class Game {
         return true;
     }
 
-    public void updatePlayerIndex(){
-		// move to next player
-		currentPlayersIndex = (currentPlayersIndex + 1) % players.size();
-	}
 
 	public void updateGameStatus(Move move){
 
@@ -151,16 +162,31 @@ public class Game {
 	}
 
     public boolean checkWinner(Move move) {
+        List<Player> winnerList = winningStrategies.stream().map(t -> t.findWinner(board.getBoard(),move))
+                .filter(t -> !Objects.isNull(t)).collect(Collectors.toList());
 
-        Player winner = null;
-        WinnerManagementService winnerFinder = new WinnerManagementService();
-        winner = winnerFinder.searchWinner(move, board.getBoard(), winningStrategies);
-
-        if (winner != null) {
-            this.winner = winner;
-            return true;
+        if (Objects.isNull(winnerList) || winnerList.size() == 0) {
+            return false;
         }
-        return false;
+        return true;
+    }
+
+
+    public void undoMove() {
+
+        // get move to undo
+        Move move = getUndoList().remove(getUndoList().size() - 1);
+
+        //mark cell as EMPTY for the move
+        List<Cell> row = board.getBoard().get(move.getCell().getRow());
+        Cell cell = row.get(move.getCell().getCol());
+        cell.setCellState(CellState.EMPTY);
+
+        // we need to update maps to reduce the frequency
+        winningStrategies.forEach(t -> t.removeMoveFrequency(board.getBoard(),move));
+
+        // set player index back to previous player
+        currentPlayersIndex -= 1;
     }
 
     public static class GameBuilder {
