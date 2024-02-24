@@ -94,7 +94,7 @@ public class Game {
         undoList.add(move);
     }
 
-    public Move performMove(int row, int col, Player player)  {
+    public void performMove(int row, int col, Player player)  {
 
 		// validate row and column data
 		if (validateCell(row,col)) {
@@ -121,18 +121,13 @@ public class Game {
                 // move to next player if game is still on going
                 if(gameState.toString().equals(GameState.ON_GOING.toString())){
                     // move to next player
-                    currentPlayersIndex = (currentPlayersIndex + 1) % players.size();
+                    currentPlayersIndex = ((currentPlayersIndex + 1) % players.size());
                 }
             }
-
-			return move;
 
 		} else {
 			System.out.println("Invalid move ... Please play again ");
 		}
-
-		return null;
-
 	}
 
 
@@ -155,6 +150,7 @@ public class Game {
 
 		// check if game has finished or drawn
 		if (this.checkWinner(move)) {
+            winner = move.getPlayer();
 			setGameState(GameState.FINISHED);
 		} else if (undoList.size() == Math.pow(board.getBoard().size(), 2)) {
 			gameState = GameState.DRAW;
@@ -186,7 +182,7 @@ public class Game {
         winningStrategies.forEach(t -> t.removeMoveFrequency(board.getBoard(),move));
 
         // set player index back to previous player
-        currentPlayersIndex -= 1;
+        currentPlayersIndex = ((currentPlayersIndex -1 + players.size()) % players.size());
     }
 
     public static class GameBuilder {

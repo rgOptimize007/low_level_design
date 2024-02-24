@@ -45,7 +45,7 @@ public class DiagonalWinningStrategy implements WinningStrategy {
         Cell cell = move.getCell();
         Symbol symbol = move.getPlayer().getPlayerSymbol();
         if(cell.getRow() == cell.getCol()) {
-            if (diagonalFrequncies.get(symbol) == board.size()) {
+            if (diagonalFrequncies.getOrDefault(symbol,0) == board.size()) {
                 return move.getPlayer();
             }
         }

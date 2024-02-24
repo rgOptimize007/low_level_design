@@ -43,9 +43,9 @@ public class ColumnWinningStrategy implements WinningStrategy {
     @Override
     public Player findWinner(List<List<Cell>> board, Move move) {
         Cell cell = move.getCell();
-        Map<Symbol, Integer> col = colFrequencies.get(cell.getCol());
         Symbol symbol = move.getPlayer().getPlayerSymbol();
-        if (col.get(symbol) == board.size()) {
+        Map<Symbol, Integer> col = colFrequencies.get(cell.getCol());
+        if (col.getOrDefault(symbol,0) == board.size()) {
             return move.getPlayer();
         }
 

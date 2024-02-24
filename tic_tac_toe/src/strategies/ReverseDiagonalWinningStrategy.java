@@ -49,7 +49,7 @@ public class ReverseDiagonalWinningStrategy implements WinningStrategy {
         Symbol symbol = cell.getPlayer().getPlayerSymbol();
 
         if(cell.getRow() + cell.getCol() == board.size() - 1) {
-            if (revDiagonalFrequencies.get(symbol) == board.size()) {
+            if (revDiagonalFrequencies.getOrDefault(symbol,0) == board.size()) {
                 return move.getPlayer();
             }
         }

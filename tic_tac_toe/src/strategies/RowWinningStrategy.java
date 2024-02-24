@@ -50,9 +50,7 @@ public class RowWinningStrategy implements WinningStrategy {
         Cell cell = move.getCell();
         Symbol symbol = cell.getPlayer().getPlayerSymbol();
         Map<Symbol, Integer> row = rowFrequencies.get(cell.getRow());
-        row.put(symbol, row.getOrDefault(symbol, 0) + 1);
-
-        if (row.get(symbol) == board.size()) {
+        if (row.getOrDefault(symbol, 0) == board.size()) {
             return move.getPlayer();
         }
 

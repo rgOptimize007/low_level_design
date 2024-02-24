@@ -30,9 +30,11 @@ public class ClientInterface {
 
         Scanner sc = new Scanner(System.in);
 
+        System.out.println("Welcome to SUIT's tic-tac-toe" + "\n\n" + "Lets see who wins MARK(X) vs HARVEY(O)");
+
+
         // players playing the game
         List<Player> players = new ArrayList<>();
-        System.out.println("Peak Player names");
         players.add(new HumanPlayer("1", "Mark", 'X', PlayerType.HUMAN));
         players.add(new HumanPlayer("2", "Harvey", 'O', PlayerType.HUMAN));
 
