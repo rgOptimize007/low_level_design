@@ -1,0 +1,48 @@
+Design Uber
+
+Def -
+Ride booking platform , to commute from source Location to Destination location.
+
+Features -
+ - Riders search for rides based on source and dest location
+ - Drivers post availability of their vehicles.
+ - Rides can be booked for immediate travel or rental for later travel.
+ - Tarrif's are calculated based on vehicle types , distance , (peak hours could be consider for later scope ).
+ - different payment methods ( later scope)
+ - Rides can be altered while ongoing to add additional stops (later scope)
+
+
+Anchors -
+
+User - userId String , phoneNumber String
+Driver extends User -  driverStatus DriverStatus
+Rider  extends User -
+DriverStatus - BUSY , FREE , NOT_AVAILABLE
+UserType - RIDER , DRIVER
+Vehicle - vehicleId String , vehicleNumber String, owner User ,currentPosition Location ,vehicleStatus VehicleStatus, vehicleType VehicleType , capacity int (capacity can also be managed at VehicleType enum level using primitive parameter)
+VehicleStatus - BOOKED , FREE , NOT_AVAIL
+VehicleType - MINI(4) , SEDAN(5) , SUV(6) , BIKE(2) (we can think of a future scale and maybe convert it to a class instead)
+Ride - ride_id String , vehicle Vehicle , rider User ,  startLocation Location , endLocation Location , estimatedFare long (fare is considered as long to ensure precision in amount calc)
+Location - location_id String , latitude double , longitude double (double is a standard consideration for lat/long)
+RideStatus - BOOKED , ON_GOING , COMPLETED
+
+Strategies - VehicleAvailability, VehicleAllotment , Payment ,
+
+
+Entity Design
+
+user - user_id , phone_number
+driver - user_id , driver_status_id
+driver_status - driver_status_id , driver_status_enum
+rider - user_id
+vehicle - vehicle_id , vehicle_no , user_id , location ,
+
+
+
+
+Flow
+
+Client -> RideBookingController(RideRequestDTO) -> RideBookingService,VehicleService ,DriverService -> RideBookingRepo , VehicleRepo (getVehicleByLocation())
+
+RideRequestDTO - rider User , vehicleType VehicleType , currentPosition Location , desiredLoaction Location
+RideResponseDTO - rideDetails RideDTO , waitingTime Date

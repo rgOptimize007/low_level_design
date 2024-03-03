@@ -1,0 +1,85 @@
+Design a parking lot
+
+
+Okay, So when we say parking lot I have a certain understanding . Let me give an overview
+and maybe we can then talk more about further requirements of this system.
+
+So
+
+Overview -
+
+Parking lot a big place/piece of a land with certain numbers of spots to park vehicles.
+It has entries/exits from where vehicles transit , there are kiosks at these terminals to issue parking tickets or to charge payments as per payment strategy of a parking lot.
+
+Do you want to add anything more to this
+
+
+1) Do you want an entity design for this or a working software system.
+2) What will be input scenario for now (Hardcoded inputs , CLI , REST Api)
+3) Do I need to persist data? / or creating data in realtime is fine?
+
+
+
+Requirement gathering
+
+Start with the thinking of user journey
+
+
+- entry points for vehicle to enter
+- User provides vehicle details
+- Parking lot is alloted to user based on some strategy (Random , nearest , farthest)
+- issue a parking ticket to user
+- varying parking spots as per vehicle size
+- exit points for vehicle
+- parking charges calculation strategies
+- payment strategies
+- parking lot management (add/remove parking spots , add/remove allotment,charging strategies)
+
+
+Start with the thinking of structure of the system -
+
+- Diff sizes of parking spots for different type of vehicle sizes
+- multiple terminals (entries/exits)
+- parking charges strategies
+- parking spot allotment strategies
+- parking lot with certain fixed numbers of parking spots( we can add to parking spots in future)
+
+
+Design
+
+Anchors
+
+* Ticket - ticket_id String, vehicle_number String , slot_info Slot , issuedAt_gate Gate, createdAt_time Date
+* Slot - slot_id String , slot_number String , slot_type SlotType , slot_status SlotStatus
+* Gate - gate_id String , gate_number String , gate_type GateType
+* SlotType(ENUM) - SMALL , MEDIUM , LARGE
+* SlotStatus(ENUM) - EMPTY , OCCUPIED
+* GateType(ENUM) - ENTRY , EXIT
+* ParkingLot - lot_id String ,terminals List<Gate> , floors List<Floor> , user List<User>
+* Floor - floor_id String , slots List<Slot> , floor_status FloorStatus
+* User - user_id String , user_name String , user_role UserRole
+* FloorStatus(ENUM) - OPEN , CLOSED , PARTIALLY_EMPTY , EMPTY
+* UserRole - ADMIN , GATE_OPERATOR
+* Bill - bill_id String , ticket Ticket , paidAt_time Date , issuedAt_gate Gate , bill_status BillStatus
+* BillStatus(ENUM) - FULLY_PAID , PARTIALLY_PAID , NOT_PAID
+
+
+Design patterns
+
+- strategies  = SlotAllotmentStrategy , PaymentStrategy
+- builder = ticketBuilder
+
+Entity design
+
+Tables
+ticket - id , vehicle_number , createdAt_time , slot_id , gate_id
+slot - slot_id , slot_number , slot_type_id , slot_status_id
+gate - gate_id , gate_number , gate_type_id , lot_id
+slot_type - slot_type_id , slot_type_enum
+slot_status - slot_status_id , slot_status_enum
+gate_type - gate_type_id , gate_type_enum
+parking_lot - lot_id
+floor - floor_id , floor_status_id , lot_id
+floor_status - floor_status_id , floor_status_enum
+User - user_id , user_name , user_role_id , lot_id
+bill - bill_id , ticket_id , paid_at_time , gate_id
